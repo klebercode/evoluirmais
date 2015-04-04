@@ -112,13 +112,6 @@ MEDIA_URL = '/media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# DEFAULT_FROM_EMAIL = 'Prefeitura de Saloá <no-reply@saloa.pe.gov.br>'
-# EMAIL_USE_TLS = True
-# EMAIL_HOST = 'smtpi.kinghost.net'
-# EMAIL_HOST_USER = 'contato@saloa.pe.gov.br'
-# EMAIL_HOST_PASSWORD = 'pmsAl@9090'
-# EMAIL_PORT = 587
-
 
 # django-tinymce
 # TINYMCE_JS_URL = STATIC_URL + 'tiny_mce/tiny_mce.js'
@@ -139,9 +132,9 @@ TINYMCE_DEFAULT_CONFIG = {
 # grappelli
 GRAPPELLI_ADMIN_TITLE = 'OW7 | CMS'
 
-# GRAPPELLI_EXTENSIONS_NAVBAR = 'pmsal.extensions.Navbar'
+# GRAPPELLI_EXTENSIONS_NAVBAR = 'evoluirmais.extensions.Navbar'
 
-# GRAPPELLI_EXTENSIONS_SIDEBAR = 'pmsal.extensions.Sidebar'
+# GRAPPELLI_EXTENSIONS_SIDEBAR = 'evoluirmais.extensions.Sidebar'
 
 
 STATICFILES_FINDERS = (
