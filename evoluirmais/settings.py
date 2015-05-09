@@ -53,10 +53,8 @@ INSTALLED_APPS = (
 
     # other apps
     'south',
-    'tinymce',
     'sorl.thumbnail',
-    'mce_filebrowser',
-    # 'taggit',
+    'bootstrap3',
 
     # my apps
     'evoluirmais.core',
@@ -110,7 +108,14 @@ MEDIA_ROOT = BASE_DIR.child('media')
 MEDIA_URL = '/media/'
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+DEFAULT_FROM_EMAIL = config('DEFAULT_FROM_EMAIL')
+EMAIL_USE_TLS = config('EMAIL_USE_TLS')
+EMAIL_HOST = config('EMAIL_HOST')
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = config('EMAIL_PORT')
 
 
 # django-tinymce

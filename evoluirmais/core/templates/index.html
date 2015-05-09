@@ -1,5 +1,4 @@
-{% load i18n %}
-{% load staticfiles %}
+{% load i18n staticfiles bootstrap3 %}
 <!DOCTYPE html>
 <html lang="pt">
 
@@ -8,10 +7,10 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="Busque Conhecimento">
+    <meta name="author" content="Evoluir Mais">
 
-    <title>Landing Page - Start Bootstrap Theme</title>
+    <title>Evoluir Mais</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="{{ STATIC_URL }}css/bootstrap.min.css" rel="stylesheet">
@@ -34,6 +33,32 @@
 </head>
 
 <body>
+
+    <!-- start:popup_banner -->
+    {% if subscription_success_1 or subscription_success_2 or contact_success %}
+        <div class="modal fade bs-example-modal-lg" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Você E+</h4>
+              </div>
+              <div class="modal-body">
+                {% if subscription_success_1 or subscription_success_2 %}
+                <p>Obrigado, seu e-mail foi cadastrado com sucesso.</p>
+                <p>Você será um dos primeiros a receber nossas novidades.</p>
+                {% elif contact_success %}
+                <p>Obrigado, logo entraremos em contato.</p>
+                {% endif %}
+              </div>
+              <div class="modal-footer">
+                <a class="btn btn-success" data-dismiss="modal">Ok</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    {% endif %}
+    <!-- end:popup_banner -->
 
     <!-- Navigation -->
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
@@ -161,12 +186,18 @@
                     <p class="lead">Vamos reunir aqui os principais cursos, palestras, feiras e eventos que
                     acontecerão na sua cidade e no Brasil. Você ficará por dentro dos eventos que poderão agregar
                     valor á você e sua carreira.</p>
-                    <form class="form-inline" role="form">
-                      <div class="form-group">
-                        <input type="email" class="form-control" placeholder="E-mail">
-                      </div>
-                      <button type="submit" class="btn btn-success"><strong>Cadastrar</strong></button>
+                    {% if subscription_success_1 %}
+                    <a href="{% url 'home' %}" type="button" class="btn btn-success">Cadastrar novo e-mail</a>
+                    {% else %}
+                    <form class="form" role="form" method="post" action=".">
+                        {% csrf_token %}
+                        {% bootstrap_form subscription_form_1 layout='inline' %}
+                        <input type="hidden" name="action" value="subscription1">
+                        {% buttons %}
+                            <button type="submit" class="btn btn-success">Cadastrar</button>
+                        {% endbuttons %}
                     </form>
+                    {% endif %}
                 </div>
                 <div class="col-lg-5 col-lg-offset-2 col-sm-6">
                     <img class="img-responsive img-radius" src="{{ STATIC_URL }}img/you-test-2.jpg" alt="Para Você">
@@ -192,12 +223,18 @@
                     resultados para seu evento.
                     Anuncie <strong>gratuitamente</strong> conosco seu evento e segmente o
                     público que deseja atingir!</p>
-                    <form class="form-inline" role="form">
-                      <div class="form-group">
-                        <input type="email" class="form-control" placeholder="E-mail">
-                      </div>
-                      <button type="submit" class="btn btn-success">Cadastre-se</button>
+                    {% if subscription_success_2 %}
+                    <a href="{% url 'home' %}" type="button" class="btn btn-success">Cadastrar novo e-mail</a>
+                    {% else %}
+                    <form class="form" role="form" method="post" action=".">
+                        {% csrf_token %}
+                        {% bootstrap_form subscription_form_2 layout='inline' %}
+                        <input type="hidden" name="action" value="subscription2">
+                        {% buttons %}
+                            <button type="submit" class="btn btn-success">Cadastrar</button>
+                        {% endbuttons %}
                     </form>
+                    {% endif %}
                 </div>
                 <div class="col-lg-5 col-sm-pull-6  col-sm-6">
                     <img class="img-responsive img-radius" src="{{ STATIC_URL }}img/event-test-2.jpg" alt="Para Seu Evento">
@@ -217,21 +254,18 @@
             <div class="row contact">
                 <div class="col-lg-3"></div>
                 <div class="col-lg-6">
-                    <form role="form">
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">Nome</label>
-                        <input type="text" class="form-control" id="exampleInputEmail1">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputEmail1">E-mail</label>
-                        <input type="email" class="form-control" id="exampleInputEmail1">
-                      </div>
-                      <div class="form-group">
-                        <label for="exampleInputPassword1">Mensagem</label>
-                        <textarea class="form-control" cols="30" rows="10" name="" id=""></textarea>
-                      </div>
-                      <button type="submit" class="btn btn-default">Enviar</button>
-                    </form>
+                    {% if contact_success %}
+                        <a href="{% url 'home' %}" class="btn btn-default">Enviar novo contato</a>
+                    {% else %}
+                        <form class="form" role="form" method="post">
+                            {% csrf_token %}
+                            {% bootstrap_form contact_form %}
+                            <input type="hidden" name="action" value="contact">
+                            {% buttons %}
+                                <button type="submit" class="btn btn-default">Enviar</button>
+                            {% endbuttons %}
+                        </form>
+                    {% endif %}
                 </div>
                 <div class="col-lg-3"></div>
                 <!-- <div class="col-lg-6">
@@ -293,10 +327,14 @@
     <script src="{{ STATIC_URL }}js/bootstrap.min.js"></script>
 
     <!-- Script to Activate the Carousel -->
-    <script>
-    $('.carousel').carousel({
-        interval: 5000 //changes the speed
-    })
+    <script type="text/javascript">
+        $('.carousel').carousel({
+            interval: 5000 //changes the speed
+        })
+
+        $(window).load(function(){
+            $('#myModal').modal('show');
+        });
     </script>
 
 </body>
