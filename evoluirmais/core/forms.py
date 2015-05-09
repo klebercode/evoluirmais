@@ -25,12 +25,12 @@ class ContactForm(forms.Form):
             'email': self.cleaned_data['email'],
             'message': self.cleaned_data['message'],
         }
-        email_to = 'contato@evoluirmais.com.br'
+
         message = render_to_string('contact_mail.txt', context)
         message_html = render_to_string('contact_mail.html', context)
         msg = EmailMultiAlternatives(subject, message,
                                      config('DEFAULT_FROM_EMAIL'),
-                                     [email_to])
+                                     [config('DEFAULT_TO_EMAIL')])
 
         msg.attach_alternative(message_html, 'text/html')
         msg.send()
@@ -54,12 +54,11 @@ class SubscriptionForm(forms.ModelForm):
             'type': typename,
         }
 
-        email_to = 'contato@evoluirmais.com.br'
         message = render_to_string('subscription_mail.txt', context)
         message_html = render_to_string('subscription_mail.html', context)
         msg = EmailMultiAlternatives(subject, message,
                                      config('DEFAULT_FROM_EMAIL'),
-                                     [email_to])
+                                     [config('DEFAULT_TO_EMAIL')])
 
         msg.attach_alternative(message_html, 'text/html')
         msg.send()
